@@ -40,9 +40,11 @@ sweep_defaults = {
 sweep_id = wandb.sweep(sweep_config, project = "XLNET-SST5", entity="madhudorai24")
 
 data = pytreebank.load_sst("/kaggle/input/stanford-sentiment-treebank-v2-sst2/SST2-Data/SST2-Data/trainDevTestTrees_PTB/trees/")
+
 out_dir = "/kaggle/working/"
 os.makedirs(out_dir, exist_ok=True)  # Create the directory if it doesn't exist
 out_path = os.path.join(out_dir, "sst_{}.txt")
+
 for cat in ['train','test','dev']:
     with open(out_path.format(cat),"w") as file:
         for item in data[cat]:
@@ -52,11 +54,14 @@ for cat in ['train','test','dev']:
             ))
     
     print("done with {}".format(file))
+traindf = pd.read_csv("/kaggle/working/sst_train.txt",sep="\t",header=None,names=['label','text'])
+traindf['label'] = traindf['label'].str.replace("__label__","")
+traindf['label'] = traindf['label'].astype(int).astype("category")
 
-train = pd.read_csv("/kaggle/working/sst_train.txt",sep="\t",header=None,names=['label','text'])
-train['label'] = train['label'].str.replace("__label__","")
-train['label'] = train['label'].astype(int).astype("category")
-traindf, validdf = train_test_split(train, test_size=0.2, random_state=42)
+validdf = pd.read_csv("/kaggle/working/sst_dev.txt",sep="\t",header=None,names=['label','text'])
+validdf['label'] = validdf['label'].str.replace("__label__","")
+validdf['label'] = validdf['label'].astype(int).astype("category")
+
 testdf = pd.read_csv("/kaggle/working/sst_test.txt",sep="\t",header=None,names=['label','text'])
 testdf['label'] = testdf['label'].str.replace("__label__","")
 testdf['label'] = testdf['label'].astype(int).astype("category")
