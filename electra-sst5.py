@@ -8,10 +8,8 @@ import datetime
 import wandb
 import random
 import numpy as np
-from textblob import TextBlob
-import fasttext
 import pytreebank
-import os,sys
+import os
 from sklearn.model_selection import train_test_split
 
 sweep_config = {
