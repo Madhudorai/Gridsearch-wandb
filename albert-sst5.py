@@ -10,7 +10,6 @@ import random
 import numpy as np
 import pytreebank
 import os
-from sklearn.model_selection import train_test_split
 
 sweep_config = {
     'method': 'grid', 
@@ -53,10 +52,14 @@ for cat in ['train','test','dev']:
     
     print("done with {}".format(file))
 
-train = pd.read_csv("/kaggle/working/sst_train.txt",sep="\t",header=None,names=['label','text'])
-train['label'] = train['label'].str.replace("__label__","")
-train['label'] = train['label'].astype(int).astype("category")
-traindf, validdf = train_test_split(train, test_size=0.2, random_state=42)
+traindf = pd.read_csv("/kaggle/working/sst_train.txt",sep="\t",header=None,names=['label','text'])
+traindf['label'] = traindf['label'].str.replace("__label__","")
+traindf['label'] = traindf['label'].astype(int).astype("category")
+
+validdf = pd.read_csv("/kaggle/working/sst_dev.txt",sep="\t",header=None,names=['label','text'])
+validdf['label'] = validdf['label'].str.replace("__label__","")
+validdf['label'] = validdf['label'].astype(int).astype("category")
+
 testdf = pd.read_csv("/kaggle/working/sst_test.txt",sep="\t",header=None,names=['label','text'])
 testdf['label'] = testdf['label'].str.replace("__label__","")
 testdf['label'] = testdf['label'].astype(int).astype("category")
