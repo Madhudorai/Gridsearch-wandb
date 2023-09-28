@@ -2,9 +2,8 @@
 Sentiment Analysis task by fine tuning text transformers (ALBERT, XLNET, ELECTRA) on 3 datasets and using wandb agent for hyperparameter sweeps, visualisations.
 
 # How to download datasets?
-a) IMDB Dataset was downloaded from Kaggle -https://www.kaggle.com/datasets/columbine/imdb-dataset-sentiment-analysis-in-csv-format
-b)
-c)
+a) IMDB Dataset to be downloaded from Kaggle -https://www.kaggle.com/datasets/columbine/imdb-dataset-sentiment-analysis-in-csv-format. The path to this dataset should be modified in code. 
+b) Stanford sentiment tree-5 number rating scale - https://www.kaggle.com/datasets/atulanandjha/stanford-sentiment-treebank-v2-sst2
 
 # Huggingface models used:
 a) Albert : https://huggingface.co/albert-base-v2 
