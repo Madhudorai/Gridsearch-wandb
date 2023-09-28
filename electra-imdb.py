@@ -1,6 +1,6 @@
 import pandas as pd
 import torch
-from transformers import ElectraTokenizer,AutoModelForSequenceClassification,get_linear_schedule_with_warmup
+from transformers import ElectraTokenizer,ElectraForSequenceClassification,get_linear_schedule_with_warmup
 from torch.utils.data import TensorDataset
 from torch.utils.data import DataLoader, RandomSampler, SequentialSampler
 import time
@@ -100,7 +100,7 @@ def ret_dataloader():
 
 #TRANSFORMER MODEL
 def ret_model():
-    model = AutoModelForSequenceClassification.from_pretrained("google/electra-base-discriminator", num_labels=2, return_dict = True)
+    model = ElectraForSequenceClassification.from_pretrained("google/electra-base-discriminator", num_labels=2, return_dict = True)
     return model
 
 def ret_optim(model):
