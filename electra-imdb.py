@@ -8,6 +8,7 @@ import datetime
 import wandb
 import random
 import numpy as np
+import os 
 
 sweep_config = {
     'method': 'grid', 
@@ -36,9 +37,9 @@ sweep_defaults = {
 
 sweep_id = wandb.sweep(sweep_config, project = "ELECTRA-IMDB", entity="madhudorai24")
 
-traindf = pd.read_csv("/pathto/IMDB/Train.csv")
-validdf = pd.read_csv("/pathto/IMDB/Valid.csv")
-testdf = pd.read_csv("/pathto/IMDB/Test.csv")
+traindf = pd.read_csv("/export/livia/home/vision/Mdoraiswamy/IMDB/Train.csv")
+validdf = pd.read_csv("/export/livia/home/vision/Mdoraiswamy/IMDB/Valid.csv")
+testdf = pd.read_csv("/export/livia/home/vision/Mdoraiswamy/IMDB/Test.csv")
 
 tokenizer = ElectraTokenizer.from_pretrained("google/electra-base-discriminator")
 
@@ -248,7 +249,7 @@ def train_valid_test():
         # Evaluate data for one epoch
         for batch in validation_dataloader:
     
-            b_input_ids = batch[0].cuda()
+            b_input_ids = batch[0].to(device)
             b_input_mask = batch[1].to(device)
             b_labels = batch[2].to(device)
             
@@ -288,19 +289,20 @@ def train_valid_test():
                 'Validation Time': validation_time
             })
         
+        checkpoint_directory = "/export/livia/home/vision/Mdoraiswamy/electra-imdb-model"
         #save the model if its the best epoch
         if val_accuracy > best_val_accuracy:
             best_val_accuracy = val_accuracy
-            checkpoint_file = f"best_model{sweep_NAME}_epoch{epoch_i}.pt"
+            checkpoint_file = os.path.join(checkpoint_directory, f"best_model{sweep_NAME}_epoch{epoch_i}.pt")
             torch.save(model.state_dict(), checkpoint_file)
-
+            
     print("")
     print("Training complete for 1 model!")
     print("Total training took {:} (h:mm:ss)".format(format_time(time.time()-total_t0)))
 
-     # ========================================
-        #               Testing
-        # ========================================
+    # ========================================
+    #               Testing
+    # ========================================
     best_model = ret_model()
     best_model.load_state_dict(torch.load(checkpoint_file))
     best_model.to(device)
